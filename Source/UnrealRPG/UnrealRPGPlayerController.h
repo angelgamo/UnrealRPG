@@ -25,6 +25,8 @@ public:
 	/** FX Class that we will spawn when clicking */
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input)
 	UNiagaraSystem* FXCursor;
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input)
+	UNiagaraSystem* FXCursorAttack;
 
 protected:
 	/** True if the controlled character should navigate to the mouse cursor. */
@@ -40,6 +42,8 @@ protected:
 	void OnSetDestinationReleased();
 	void OnTouchPressed(const ETouchIndex::Type FingerIndex, const FVector Location);
 	void OnTouchReleased(const ETouchIndex::Type FingerIndex, const FVector Location);
+
+	void OnSetAttackPressed();
 
 private:
 	bool bInputPressed; // Input is bring pressed

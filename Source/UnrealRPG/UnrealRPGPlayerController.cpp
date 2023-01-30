@@ -57,6 +57,8 @@ void AUnrealRPGPlayerController::SetupInputComponent()
 	InputComponent->BindAction("SetDestination", IE_Pressed, this, &AUnrealRPGPlayerController::OnSetDestinationPressed);
 	InputComponent->BindAction("SetDestination", IE_Released, this, &AUnrealRPGPlayerController::OnSetDestinationReleased);
 
+	InputComponent->BindAction("SetAttack", IE_Released, this, &AUnrealRPGPlayerController::OnSetAttackPressed);
+
 	// support touch devices 
 	InputComponent->BindTouch(EInputEvent::IE_Pressed, this, &AUnrealRPGPlayerController::OnTouchPressed);
 	InputComponent->BindTouch(EInputEvent::IE_Released, this, &AUnrealRPGPlayerController::OnTouchReleased);
@@ -89,6 +91,18 @@ void AUnrealRPGPlayerController::OnSetDestinationReleased()
 		UAIBlueprintHelperLibrary::SimpleMoveToLocation(this, HitLocation);
 		UNiagaraFunctionLibrary::SpawnSystemAtLocation(this, FXCursor, HitLocation, FRotator::ZeroRotator, FVector(1.f, 1.f, 1.f), true, true, ENCPoolMethod::None, true);
 	}
+}
+
+void AUnrealRPGPlayerController::OnSetAttackPressed()
+{
+	// We look for the location in the world where the player has pressed the input
+	FVector HitLocation = FVector::ZeroVector;
+	FHitResult Hit;
+	GetHitResultUnderCursor(ECC_Visibility, true, Hit);
+	HitLocation = Hit.Location;
+
+	// We spawn some particles
+	UNiagaraFunctionLibrary::SpawnSystemAtLocation(this, FXCursorAttack, HitLocation, FRotator::ZeroRotator, FVector(1.f, 1.f, 1.f), true, true, ENCPoolMethod::None, true);
 }
 
 void AUnrealRPGPlayerController::OnTouchPressed(const ETouchIndex::Type FingerIndex, const FVector Location)
