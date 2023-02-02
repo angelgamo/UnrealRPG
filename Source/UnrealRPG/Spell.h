@@ -5,6 +5,8 @@
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
 #include "SkillDT.h"
+#include "Kismet/KismetSystemLibrary.h"
+#include "Niagara/Public/NiagaraComponent.h"
 #include "Spell.generated.h"
 
 UCLASS()
@@ -15,11 +17,22 @@ class UNREALRPG_API ASpell : public AActor
 public:
 	// Sets default values for this actor's properties
 	ASpell();
+
+	UPROPERTY(BlueprintReadWrite, EditAnywhere)
+	UStaticMeshComponent* mesh;
+	UPROPERTY(BlueprintReadWrite, EditDefaultsOnly)
+	UNiagaraComponent* particleTrail;
+	UPROPERTY(BlueprintReadWrite, EditDefaultsOnly)
+	UNiagaraComponent* particleFinal;
 	
 	UPROPERTY(BlueprintReadWrite, EditAnywhere)
 	FVector spawnLoc;
 	UPROPERTY (BlueprintReadWrite, EditAnywhere)
 	float duration;
+	UPROPERTY (BlueprintReadWrite, EditAnywhere)
+	float speed;
+	UPROPERTY (BlueprintReadWrite, EditAnywhere)
+	float maxDistance;
 	
 	UPROPERTY (BlueprintReadWrite, EditAnywhere)
 	int damage;
@@ -28,25 +41,55 @@ public:
 	UPROPERTY (BlueprintReadWrite, EditAnywhere)
 	FVector targetLoc;
 	UPROPERTY (BlueprintReadWrite, EditAnywhere)
-	FRotator targetDir;
+	FVector targetDir;
 	
 	UPROPERTY (BlueprintReadWrite, EditAnywhere)
 	TEnumAsByte<ESkillCastType> castType;
+
+	bool canMove = false;
+	float distTraveled = 0.0f;
 
 	
 	void SetDamage(int dmg) { damage = dmg;}
 	
 	UFUNCTION (BlueprintCallable)
-	void Initialize(int _dmg, float _durat, AActor* _target, FVector _targetLoc,
+	void Initialize(int _dmg, float _durat, float _speed, float _maxDistance, AActor* _target, FVector _targetLoc,
 	FRotator _targetDir, TEnumAsByte<ESkillCastType> _castType )
 	{
 		damage = _dmg;
-		duration = _durat;
+		SetLifeSpan(_durat);	//duration = _durat;
+		speed = _speed;
+		maxDistance = _maxDistance;
 		target = _target;
 		targetLoc = _targetLoc;
-		targetDir = _targetDir;
+		targetLoc.Z = 0.0f;
+		SetActorRotation(_targetDir);
+		targetDir = GetActorForwardVector();
 		castType = _castType;
+		spawnLoc = GetActorLocation();
+		canMove = true;
 	}
+
+	UFUNCTION (BlueprintCallable)
+	void BetterDestroy()
+	{
+		canMove = false;
+		
+		FLatentActionInfo action;
+		action.ExecutionFunction = "Destroy";
+		action.CallbackTarget = this;
+
+		mesh->SetHiddenInGame(true);
+		
+		particleTrail->Deactivate();
+		particleFinal->Activate();
+		
+		UKismetSystemLibrary::Delay(this, particleFinal->GetMaxSimTime(), action);
+	}
+
+	void OnLocation(float delta);
+	void OnActor(float delta);
+	void OnDirection(float delta);
 
 protected:
 	// Called when the game starts or when spawned

@@ -29,17 +29,17 @@ public:
 	UPROPERTY(BlueprintReadWrite, EditAnywhere)
 	TSubclassOf<class ASpell> skillBP;
 	UPROPERTY(BlueprintReadWrite, EditAnywhere)
-	int baseDamage;
-	UPROPERTY(BlueprintReadWrite, EditAnywhere)
 	int manaCost;
 	UPROPERTY(BlueprintReadWrite, EditAnywhere)
-	FVector scale;
+	int baseDamage;
+	UPROPERTY(BlueprintReadWrite, EditAnywhere)
+	float speed;
 	UPROPERTY(BlueprintReadWrite, EditAnywhere)
 	TEnumAsByte<ESkillCastType> castType;
 	UPROPERTY(BlueprintReadWrite, EditAnywhere)
 	float maxDistance;
 
 	FSkillDT() : name("") , description(""), image(nullptr), skillBP(nullptr),
-		baseDamage(0) , manaCost(0), scale (FVector::ZeroVector), 
+		manaCost(0) , baseDamage(0), speed(0.0f), 
 		castType(onActor), maxDistance(1000.0f) {}
 };

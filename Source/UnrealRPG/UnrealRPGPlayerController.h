@@ -3,6 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "SkillDT.h"
 #include "Templates/SubclassOf.h"
 #include "GameFramework/PlayerController.h"
 #include "UnrealRPGPlayerController.generated.h"
@@ -27,6 +28,8 @@ public:
 	UNiagaraSystem* FXCursor;
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input)
 	UNiagaraSystem* FXCursorAttack;
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input)
+	UDataTable* SkillDT;
 
 protected:
 	/** True if the controlled character should navigate to the mouse cursor. */
