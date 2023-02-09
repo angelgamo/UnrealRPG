@@ -15,7 +15,6 @@ class UNREALRPG_API ASpell : public AActor
 	GENERATED_BODY()
 
 public:
-	// Sets default values for this actor's properties
 	ASpell();
 
 	UPROPERTY(BlueprintReadWrite, EditAnywhere)
@@ -75,16 +74,12 @@ public:
 	{
 		canMove = false;
 		
-		FLatentActionInfo action;
-		action.ExecutionFunction = "Destroy";
-		action.CallbackTarget = this;
-
 		mesh->SetHiddenInGame(true);
 		
 		particleTrail->Deactivate();
 		particleFinal->Activate();
 		
-		UKismetSystemLibrary::Delay(this, particleFinal->GetMaxSimTime(), action);
+		SetLifeSpan(1.0f);
 	}
 
 	void OnLocation(float delta);
@@ -92,10 +87,8 @@ public:
 	void OnDirection(float delta);
 
 protected:
-	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
 public:	
-	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 };

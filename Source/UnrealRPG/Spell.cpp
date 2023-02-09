@@ -4,10 +4,8 @@
 #include "Spell.h"
 #include "Components/StaticMeshComponent.h"
 
-// Sets default values
 ASpell::ASpell()
 {
- 	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
 	InitialLifeSpan = 10.0f;
 
@@ -19,16 +17,16 @@ ASpell::ASpell()
 	particleFinal->SetAutoActivate(false);
 }
 
-// Called when the game starts or when spawned
 void ASpell::BeginPlay()
 {
 	spawnLoc = GetActorLocation();
 	Super::BeginPlay();
-	
+	FAttachmentTransformRules rules(EAttachmentRule::SnapToTarget, true);
+	particleTrail->AttachToComponent(mesh, rules, TEXT("socket"));
+	particleFinal->AttachToComponent(mesh, rules, TEXT("socket"));
 }
 
-// Called every frame
-void ASpell::Tick(float DeltaTime)
+ void ASpell::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
@@ -37,7 +35,7 @@ void ASpell::Tick(float DeltaTime)
 		distTraveled += speed * DeltaTime;
 		if (distTraveled >= maxDistance)
 			BetterDestroy();
-
+		
 		if (castType == onLocation)
 			OnLocation(DeltaTime);
 		else if (castType == onActor)
@@ -52,12 +50,8 @@ void ASpell::OnLocation(float delta)
 	OnDirection(delta);
 	FVector v1 = GetActorLocation();
 	v1.Z = 0.0f;
-	if (FVector::Dist(v1, targetLoc) < 0.2f)
-	{
+	if (FVector::Dist(v1, targetLoc) < 10.0f)
 		BetterDestroy();
-		UE_LOG(LogTemp, Warning, TEXT("Location arrived"));
-		//No funciona continuar aqui
-	}
 }
 
 void ASpell::OnActor(float delta)
