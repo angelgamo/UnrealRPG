@@ -48,6 +48,10 @@ protected:
 
 	void OnSetAttackPressed();
 
+public:
+	virtual float TakeDamage(float DamageAmount, FDamageEvent const& DamageEvent, AController* EventInstigator,
+		AActor* DamageCauser) override;
+
 private:
 	bool bInputPressed; // Input is bring pressed
 	bool bIsTouch; // Is it a touch device

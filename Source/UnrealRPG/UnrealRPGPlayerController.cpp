@@ -105,6 +105,14 @@ void AUnrealRPGPlayerController::OnSetAttackPressed()
 	UNiagaraFunctionLibrary::SpawnSystemAtLocation(this, FXCursorAttack, HitLocation, FRotator::ZeroRotator, FVector(1.f, 1.f, 1.f), true, true, ENCPoolMethod::None, true);
 }
 
+float AUnrealRPGPlayerController::TakeDamage(float DamageAmount, FDamageEvent const& DamageEvent,
+	AController* EventInstigator, AActor* DamageCauser)
+{
+	// Calculate damage
+	
+	//return Super::TakeDamage(DamageAmount, DamageEvent, EventInstigator, DamageCauser);
+}
+
 void AUnrealRPGPlayerController::OnTouchPressed(const ETouchIndex::Type FingerIndex, const FVector Location)
 {
 	bIsTouch = true;
