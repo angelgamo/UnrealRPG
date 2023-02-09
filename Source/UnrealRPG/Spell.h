@@ -48,6 +48,8 @@ public:
 	bool canMove = false;
 	float distTraveled = 0.0f;
 
+	TSubclassOf<UDamageType> damageType;
+
 	
 	void SetDamage(int dmg) { damage = dmg;}
 	
@@ -85,6 +87,8 @@ public:
 	void OnLocation(float delta);
 	void OnActor(float delta);
 	void OnDirection(float delta);
+
+	void OnProjectileImpact(UPrimitiveComponent* HitComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, FVector NormalImpulse, const FHitResult& hit);
 
 protected:
 	virtual void BeginPlay() override;

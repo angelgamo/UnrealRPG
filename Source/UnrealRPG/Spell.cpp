@@ -3,6 +3,7 @@
 
 #include "Spell.h"
 #include "Components/StaticMeshComponent.h"
+#include "Kismet/GameplayStatics.h"
 
 ASpell::ASpell()
 {
@@ -64,5 +65,14 @@ void ASpell::OnActor(float delta)
 void ASpell::OnDirection(float delta)
 {
 	SetActorLocation(GetActorLocation() + targetDir * speed * delta, true);
+}
+
+void ASpell::OnProjectileImpact(UPrimitiveComponent* HitComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp,
+	FVector NormalImpulse, const FHitResult& hit)
+{
+	if(OtherActor)
+	{
+		UGameplayStatics::ApplyPointDamage(OtherActor, damage, NormalImpulse, hit, GetInstigator()->Controller, this, damageType);
+	}
 }
 
