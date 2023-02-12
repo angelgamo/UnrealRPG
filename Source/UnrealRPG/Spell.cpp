@@ -74,5 +74,6 @@ void ASpell::OnProjectileImpact(UPrimitiveComponent* HitComponent, AActor* Other
 	{
 		UGameplayStatics::ApplyPointDamage(OtherActor, damage, NormalImpulse, hit, GetInstigator()->Controller, this, damageType);
 	}
+	UE_LOG(LogTemp, Warning, TEXT("Projectil impacto con %s"), *OtherActor->GetName());
 }
 

@@ -58,6 +58,8 @@ void AUnrealRPGPlayerController::SetupInputComponent()
 	InputComponent->BindAction("SetDestination", IE_Released, this, &AUnrealRPGPlayerController::OnSetDestinationReleased);
 
 	InputComponent->BindAction("SetAttack", IE_Released, this, &AUnrealRPGPlayerController::OnSetAttackPressed);
+	InputComponent->BindAction("Attack1", IE_Released, this, &AUnrealRPGPlayerController::OnSetAttackPressed);
+	InputComponent->BindAction("Attack2", IE_Released, this, &AUnrealRPGPlayerController::OnSetAttackPressed);
 
 	// support touch devices 
 	InputComponent->BindTouch(EInputEvent::IE_Pressed, this, &AUnrealRPGPlayerController::OnTouchPressed);
@@ -109,7 +111,7 @@ float AUnrealRPGPlayerController::TakeDamage(float DamageAmount, FDamageEvent co
 	AController* EventInstigator, AActor* DamageCauser)
 {
 	// Calculate damage
-	
+	return DamageAmount;
 	//return Super::TakeDamage(DamageAmount, DamageEvent, EventInstigator, DamageCauser);
 }
 
