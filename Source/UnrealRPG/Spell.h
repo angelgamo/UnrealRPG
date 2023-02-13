@@ -19,6 +19,8 @@ public:
 
 	UPROPERTY(BlueprintReadWrite, EditAnywhere)
 	UStaticMeshComponent* mesh;
+	UPROPERTY(BlueprintReadWrite, EditAnywhere)
+	UStaticMeshComponent* meshExplosionTrigger;
 	UPROPERTY(BlueprintReadWrite, EditDefaultsOnly)
 	UNiagaraComponent* particleTrail;
 	UPROPERTY(BlueprintReadWrite, EditDefaultsOnly)
@@ -89,7 +91,8 @@ public:
 	void OnDirection(float delta);
 
 	void OnProjectileImpact(UPrimitiveComponent* HitComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, FVector NormalImpulse, const FHitResult& hit);
-
+	void OnProjectileExplosionImpact(UPrimitiveComponent* HitComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, FVector NormalImpulse, const FHitResult& Hit);
+	
 protected:
 	virtual void BeginPlay() override;
 

@@ -11,7 +11,11 @@ ASpell::ASpell()
 	InitialLifeSpan = 10.0f;
 
 	mesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Mesh"));
-	mesh->SetCollisionProfileName(TEXT("NoCollision"));
+	mesh->SetCollisionProfileName(TEXT("Hitler2"));
+	mesh->OnComponentHit.AddDynamic(this, &ASpell::OnProjectileImpact);
+	meshExplosionTrigger = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("MeshTrailExplosion"));
+	meshExplosionTrigger->SetCollisionProfileName(TEXT("NoCollision"));
+	meshExplosionTrigger->OnComponentHit.AddDynamic(this, &ASpell::OnProjectileExplosionImpact);
 	SetRootComponent(mesh);
 	particleTrail = CreateDefaultSubobject<UNiagaraComponent>(TEXT("ParticleTrail"));
 	particleFinal = CreateDefaultSubobject<UNiagaraComponent>(TEXT("ParticleFinal"));
@@ -25,6 +29,8 @@ void ASpell::BeginPlay()
 	FAttachmentTransformRules rules(EAttachmentRule::SnapToTarget, true);
 	particleTrail->AttachToComponent(mesh, rules, TEXT("socket"));
 	particleFinal->AttachToComponent(mesh, rules, TEXT("socket"));
+
+	mesh->OnComponentBeginOverlap.AddDynamic(this)
 }
 
  void ASpell::Tick(float DeltaTime)
@@ -75,5 +81,10 @@ void ASpell::OnProjectileImpact(UPrimitiveComponent* HitComponent, AActor* Other
 		UGameplayStatics::ApplyPointDamage(OtherActor, damage, NormalImpulse, hit, GetInstigator()->Controller, this, damageType);
 	}
 	UE_LOG(LogTemp, Warning, TEXT("Projectil impacto con %s"), *OtherActor->GetName());
+}
+
+void ASpell::OnProjectileExplosionImpact(UPrimitiveComponent* HitComponent, AActor* OtherActor,
+	UPrimitiveComponent* OtherComp, FVector NormalImpulse, const FHitResult& Hit)
+{
 }
 
