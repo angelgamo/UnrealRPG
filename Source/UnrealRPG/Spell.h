@@ -60,7 +60,7 @@ public:
 	FRotator _targetDir, TEnumAsByte<ESkillCastType> _castType )
 	{
 		damage = _dmg;
-		SetLifeSpan(_durat);	//duration = _durat;
+		//+SetLifeSpan(_durat);	//duration = _durat;
 		speed = _speed;
 		maxDistance = _maxDistance;
 		target = _target;
@@ -71,6 +71,9 @@ public:
 		castType = _castType;
 		spawnLoc = GetActorLocation();
 		canMove = true;
+
+		if (castType == onLocation)
+			mesh->SetCollisionProfileName(TEXT("NoCollision"));
 	}
 
 	UFUNCTION (BlueprintCallable)
@@ -82,6 +85,8 @@ public:
 		
 		particleTrail->Deactivate();
 		particleFinal->Activate();
+		mesh->SetCollisionProfileName(TEXT("NoCollision"));
+		meshExplosionTrigger->SetCollisionProfileName(TEXT("Hitler2"));
 		
 		SetLifeSpan(1.0f);
 	}
@@ -90,8 +95,10 @@ public:
 	void OnActor(float delta);
 	void OnDirection(float delta);
 
-	void OnProjectileImpact(UPrimitiveComponent* HitComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, FVector NormalImpulse, const FHitResult& hit);
-	void OnProjectileExplosionImpact(UPrimitiveComponent* HitComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, FVector NormalImpulse, const FHitResult& Hit);
+	UFUNCTION(BlueprintCallable)
+	void OnProjectileImpact(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int BodyIndex, bool FromSweep, const FHitResult& Hit);
+	UFUNCTION(BlueprintCallable)
+	void OnProjectileExplosionImpact(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int BodyIndex, bool FromSweep, const FHitResult& Hit);
 	
 protected:
 	virtual void BeginPlay() override;

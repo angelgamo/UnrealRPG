@@ -43,3 +43,23 @@ public:
 		manaCost(0) , baseDamage(0), speed(0.0f), 
 		castType(onActor), maxDistance(1000.0f) {}
 };
+
+USTRUCT(BlueprintType)
+struct UNREALRPG_API FClassDT : public FTableRowBase
+{
+	GENERATED_BODY()
+
+public:
+	UPROPERTY(BlueprintReadWrite, EditAnywhere)
+	FString name;
+	UPROPERTY(BlueprintReadWrite, EditAnywhere)
+	int hp;
+	UPROPERTY(BlueprintReadWrite, EditAnywhere)
+	int mana;
+	UPROPERTY(BlueprintReadWrite, EditAnywhere)
+	int damage;
+	UPROPERTY(BlueprintReadWrite, EditAnywhere)
+	float speed;
+	
+	FClassDT() : name(""), hp(0), mana(0) , damage(0), speed(0.0f) {}
+};
